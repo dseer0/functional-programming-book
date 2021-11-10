@@ -58,6 +58,21 @@ object Test1 {
       go(l, f)
     }
 
+    def init[A](l: List[A]): List[A] = {
+      l match {
+        case Nil => Nil
+        case Cons(x, Nil) => Nil
+        case Cons(x,xs) => Cons(x, init(xs))
+      }
+    }
+
+    def add[A](l: List[A], a: A): List[A] = {
+      l match {
+        case Nil => Cons(a, Nil)
+        case Cons(x, xs) => Cons(x, add(xs, a))
+      }
+    }
+
     def apply[A](as: A*): List[A] =
       if (as.isEmpty) Nil
       else Cons(as.head, apply(as.tail: _*))
@@ -66,7 +81,7 @@ object Test1 {
   def main(args: Array[String]): Unit = {
     val z = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-    println(List.dropWhile(z, (a: Int) => a != 8))
+    println(List.init(List.init(z)))
 
 
   }
