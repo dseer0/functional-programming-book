@@ -29,7 +29,7 @@ object Test1 {
 
     def drop[A](l: List[A], n: Int): List[A] = {
       @annotation.tailrec
-      def dropinside[A](l: List[A], n: Int): List[A] = {
+      def dropinside(l: List[A], n: Int): List[A] = {
         if (n != 0) dropinside(List.tail(l), n - 1)
         else  l
       }
@@ -52,7 +52,7 @@ object Test1 {
   def main(args: Array[String]): Unit = {
     val z = List(1,2,3,4,5,6,7,8,9)
 
-    println(List.drop(z, 3))
+    println(List.drop(z, -1))
 
   }
 
