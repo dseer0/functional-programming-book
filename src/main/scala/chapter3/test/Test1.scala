@@ -27,6 +27,16 @@ object Test1 {
       }
     }
 
+    def drop[A](l: List[A], n: Int): List[A] = {
+      @annotation.tailrec
+      def dropinside[A](l: List[A], n: Int): List[A] = {
+        if (n != 0) dropinside(List.tail(l), n - 1)
+        else  l
+      }
+
+      dropinside(l, n)
+    }
+
     def setHead[A](list: List[A], value: A): List[A] = {
       list match {
         case Nil => Cons(value, Nil)
@@ -40,8 +50,9 @@ object Test1 {
   }
 
   def main(args: Array[String]): Unit = {
-    val z: List[Int] = List.setHead(List(2,3, 4), 15)
-    println(z)
+    val z = List(1,2,3,4,5,6,7,8,9)
+
+    println(List.drop(z, 3))
 
   }
 
