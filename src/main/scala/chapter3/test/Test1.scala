@@ -1,5 +1,7 @@
 package chapter3.test
 
+import scala.runtime.Nothing$
+
 object Test1 {
 
   sealed trait List[+A]
@@ -31,7 +33,7 @@ object Test1 {
       @annotation.tailrec
       def dropinside(l: List[A], n: Int): List[A] = {
         if (n > 0) dropinside(List.tail(l), n - 1)
-        else  l
+        else l
       }
 
       dropinside(l, n)
@@ -44,15 +46,28 @@ object Test1 {
       }
     }
 
+    def dropWhile[A](l: List[A], f: A => Boolean): List[A] = {
+      @annotation.tailrec
+      def go(l: List[A], f: A => Boolean): List[A] = {
+        l match {
+          case Nil => l
+          case Cons(x, xs) => if (f(x)) go(List.tail(l), f) else l
+        }
+      }
+
+      go(l, f)
+    }
+
     def apply[A](as: A*): List[A] =
       if (as.isEmpty) Nil
       else Cons(as.head, apply(as.tail: _*))
   }
 
   def main(args: Array[String]): Unit = {
-    val z = List(1,2,3,4,5,6,7,8,9)
+    val z = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-    println(List.drop(z, 4))
+    println(List.dropWhile(z, (a: Int) => a != 8))
+
 
   }
 
