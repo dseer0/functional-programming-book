@@ -11,15 +11,26 @@ object Test1 {
   case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
   object List {
-    def sum(ints: List[Int]): Int = ints match {
-      case Nil => 0
-      case Cons(x, xs) => x + sum(xs)
+    //    def sum(ints: List[Int]): Int = ints match {
+    //      case Nil => 0
+    //      case Cons(x, xs) => x + sum(xs)
+    //    }
+    //
+    //    def product(ds: List[Double]): Double = ds match {
+    //      case Nil => 1.0
+    //      case Cons(0.0, _) => 0.0
+    //      case Cons(x, xs) => x * product(xs)
+    //    }
+
+    def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
+      as match {
+        case Nil => z
+        case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+      }
     }
 
-    def product(ds: List[Double]): Double = ds match {
-      case Nil => 1.0
-      case Cons(0.0, _) => 0.0
-      case Cons(x, xs) => x * product(xs)
+    def length[A](as: List[A]): Int = {
+      foldRight(as, 0)((a, b) => b + 1)
     }
 
     def tail[A](list: List[A]): List[A] = {
@@ -46,7 +57,7 @@ object Test1 {
       }
     }
 
-    def dropWhile[A](l: List[A], f: A => Boolean): List[A] = {
+    def dropWhile[A](l: List[A])(f: A => Boolean): List[A] = {
       @annotation.tailrec
       def go(l: List[A], f: A => Boolean): List[A] = {
         l match {
@@ -62,7 +73,7 @@ object Test1 {
       l match {
         case Nil => Nil
         case Cons(x, Nil) => Nil
-        case Cons(x,xs) => Cons(x, init(xs))
+        case Cons(x, xs) => Cons(x, init(xs))
       }
     }
 
@@ -79,10 +90,11 @@ object Test1 {
   }
 
   def main(args: Array[String]): Unit = {
-    val z = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    val z: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-    println(List.init(List.init(z)))
-
+    println(List.foldRight(z, 0)((a, b) => a + b))
+    println(List.length(z))
+    println(List.length(List()))
 
   }
 
