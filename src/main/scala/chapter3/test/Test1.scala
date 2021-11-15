@@ -29,8 +29,29 @@ object Test1 {
       }
     }
 
+//    def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+//      as match {
+//        case Nil => z
+//        case Cons(x, xs) => f(foldLeft(xs, z)(f), x)
+//      }
+//    }
+
+    def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+      @annotation.tailrec
+      def go[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+        as match {
+          case Nil => z
+          case Cons(x, xs) => {
+            go(xs, f(z, x))(f)
+          }
+        }
+      }
+
+      go(as, z)(f)
+    }
+
     def length[A](as: List[A]): Int = {
-      foldRight(as, 0)((a, b) => b + 1)
+      foldRight(as, 0)((a, b) => 1 + b)
     }
 
     def tail[A](list: List[A]): List[A] = {
@@ -89,12 +110,17 @@ object Test1 {
       else Cons(as.head, apply(as.tail: _*))
   }
 
+
   def main(args: Array[String]): Unit = {
     val z: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
-
-    println(List.foldRight(z, 0)((a, b) => a + b))
-    println(List.length(z))
-    println(List.length(List()))
+    val strl: List[String] = List("a", "b", "c", "d")
+    println(z)
+    println("-------------------")
+    //println(List.foldRight(z, 0)((a, b) => a + b))
+    //println(List.length(z))
+    //println(List.length(List()))
+    println(List.foldLeft(z, 0)((b, a) => b + a))
+    println(List.foldLeft(strl, "")((b, a) => a + b))
 
   }
 
