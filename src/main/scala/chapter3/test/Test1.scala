@@ -88,6 +88,13 @@ object Test1 {
       dropinside(l, n)
     }
 
+    def append[A](list: List[A], a: A): List[A] = {
+      list match {
+        case Nil => Cons(a, Nil)
+        case Cons(x, xs) => Cons(x,append(xs, a))
+      }
+    }
+
     def setHead[A](list: List[A], value: A): List[A] = {
       list match {
         case Nil => Cons(value, Nil)
@@ -139,7 +146,7 @@ object Test1 {
 //    println(List.foldLeft(z, 0)((b, a) => b + a))
     //println(List.foldLeft(z, "a")((a, b) => a * b))
 
-    println(List.reverse(List("a", "b", "c", "d", "e")))
+    println(List.append(List("a", "b", "c", "d", "e"), "x"))
   }
 
   //append
