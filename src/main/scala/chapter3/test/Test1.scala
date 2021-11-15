@@ -78,6 +78,10 @@ object Test1 {
       }
     }
 
+    def flatten[A](list: List[List[A]]): List[A] = {
+      foldRight(list, List[A]())((a,b) => List.appendList(a,b))
+    }
+
     def drop[A](l: List[A], n: Int): List[A] = {
       @annotation.tailrec
       def dropinside(l: List[A], n: Int): List[A] = {
@@ -92,6 +96,13 @@ object Test1 {
       list match {
         case Nil => Cons(a, Nil)
         case Cons(x, xs) => Cons(x,append(xs, a))
+      }
+    }
+
+    def appendList[A](list: List[A], list2: List[A]): List[A] = {
+      list match {
+        case Nil => list2
+        case Cons(x, xs) => Cons(x,appendList(xs, list2))
       }
     }
 
@@ -146,7 +157,8 @@ object Test1 {
 //    println(List.foldLeft(z, 0)((b, a) => b + a))
     //println(List.foldLeft(z, "a")((a, b) => a * b))
 
-    println(List.append(List("a", "b", "c", "d", "e"), "x"))
+    val listOfLists = List(List("a","b","c"), List("d","e", "f"), List("g","h"))
+    println(List.flatten(listOfLists))
   }
 
   //append
