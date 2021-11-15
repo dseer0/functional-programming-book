@@ -29,25 +29,42 @@ object Test1 {
       }
     }
 
-//    def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
-//      as match {
-//        case Nil => z
-//        case Cons(x, xs) => f(foldLeft(xs, z)(f), x)
-//      }
-//    }
-
     def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
-      @annotation.tailrec
-      def go[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+      as match {
+        case Nil => z
+        case Cons(x, xs) => f(foldLeft(xs, z)(f), x)
+      }
+    }
+
+    //    def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+    //      @annotation.tailrec
+    //      def go[A, B](as: List[A], z: B)(f: (B, A) => B): B = {
+    //        as match {
+    //          case Nil => z
+    //          case Cons(x, xs) => {
+    //            go(xs, f(z, x))(f)
+    //          }
+    //        }
+    //      }
+    //
+    //      go(as, z)(f)
+    //    }
+
+    def reverse[A](as: List[A]): List[A] = {
+
+      def getLast(as: List[A]): A = {
         as match {
-          case Nil => z
-          case Cons(x, xs) => {
-            go(xs, f(z, x))(f)
-          }
+          case Cons(x, Nil) => x
+          case Cons(x, xs) => getLast(xs)
         }
       }
 
-      go(as, z)(f)
+      as match {
+        case Nil => Nil
+        case Cons(x, Nil) => Cons(x, Nil)
+        case Cons(x, xs) => Cons(getLast(xs), reverse(List.init(as)))
+      }
+
     }
 
     def length[A](as: List[A]): Int = {
@@ -112,16 +129,20 @@ object Test1 {
 
 
   def main(args: Array[String]): Unit = {
-    val z: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    val strl: List[String] = List("a", "b", "c", "d")
-    println(z)
+    val z: List[Int] = List(1, 2, 3)
+//    println(List(1, 2, 3))
+//    println(List(3, 2, 1))
     println("-------------------")
     //println(List.foldRight(z, 0)((a, b) => a + b))
     //println(List.length(z))
     //println(List.length(List()))
-    println(List.foldLeft(z, 0)((b, a) => b + a))
-    println(List.foldLeft(strl, "")((b, a) => a + b))
+//    println(List.foldLeft(z, 0)((b, a) => b + a))
+    //println(List.foldLeft(z, "a")((a, b) => a * b))
 
+    println(List.reverse(List("a", "b", "c", "d", "e")))
   }
 
+  //append
+  //reverse
+  //list[list] -> list
 }
