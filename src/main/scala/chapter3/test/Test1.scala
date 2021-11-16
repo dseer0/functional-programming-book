@@ -161,6 +161,13 @@ object Test1 {
       }
     }
 
+    def filter[A](as: List[A])(f: A => Boolean): List[A] = {
+      as match {
+        case Nil => Nil
+        case Cons(x, xs) => if(f(x)) Cons(x,filter(xs)(f)) else filter(xs)(f)
+      }
+    }
+
     def apply[A](as: A*): List[A] =
       if (as.isEmpty) Nil
       else Cons(as.head, apply(as.tail: _*))
@@ -168,9 +175,9 @@ object Test1 {
 
 
   def main(args: Array[String]): Unit = {
-    val z: List[Int] = List(1, 2, 3)
+    val z: List[Int] = List(1, 5, 3,4,3,5,32,5,245,5)
     val ld: List[Double] = List(1.3, 2.41321, 3.88)
-    println(List.map[Int, String](z)(a => a.toString + 'a'))
+    println(List.filter(z)(a => a != 5))
 
     //    println(List(1, 2, 3))
     //    println(List(3, 2, 1))
