@@ -79,7 +79,7 @@ object Test1 {
     }
 
     def flatten[A](list: List[List[A]]): List[A] = {
-      foldRight(list, List[A]())((a,b) => List.appendList(a,b))
+      foldRight(list, List[A]())((a, b) => List.appendList(a, b))
     }
 
     def drop[A](l: List[A], n: Int): List[A] = {
@@ -95,14 +95,14 @@ object Test1 {
     def append[A](list: List[A], a: A): List[A] = {
       list match {
         case Nil => Cons(a, Nil)
-        case Cons(x, xs) => Cons(x,append(xs, a))
+        case Cons(x, xs) => Cons(x, append(xs, a))
       }
     }
 
     def appendList[A](list: List[A], list2: List[A]): List[A] = {
       list match {
         case Nil => list2
-        case Cons(x, xs) => Cons(x,appendList(xs, list2))
+        case Cons(x, xs) => Cons(x, appendList(xs, list2))
       }
     }
 
@@ -140,6 +140,13 @@ object Test1 {
       }
     }
 
+    def transform[A](list: List[A])(f: A => A): List[A] = {
+      list match {
+        case Nil => Nil
+        case Cons(x, xs) => Cons(f(x), transform(xs)(f))
+      }
+    }
+
     def apply[A](as: A*): List[A] =
       if (as.isEmpty) Nil
       else Cons(as.head, apply(as.tail: _*))
@@ -148,17 +155,18 @@ object Test1 {
 
   def main(args: Array[String]): Unit = {
     val z: List[Int] = List(1, 2, 3)
-//    println(List(1, 2, 3))
-//    println(List(3, 2, 1))
+    //    println(List(1, 2, 3))
+    //    println(List(3, 2, 1))
     println("-------------------")
     //println(List.foldRight(z, 0)((a, b) => a + b))
     //println(List.length(z))
     //println(List.length(List()))
-//    println(List.foldLeft(z, 0)((b, a) => b + a))
+    //    println(List.foldLeft(z, 0)((b, a) => b + a))
     //println(List.foldLeft(z, "a")((a, b) => a * b))
 
-    val listOfLists = List(List("a","b","c"), List("d","e", "f"), List("g","h"))
-    println(List.flatten(listOfLists))
+    //    val listOfLists = List(List("a", "b", "c"), List("d", "e", "f"), List("g", "h"))
+    //    println(List.flatten(listOfLists))
+    println(List.transform(z)(a => a + 1))
   }
 
   //append
