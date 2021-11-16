@@ -147,6 +147,13 @@ object Test1 {
       }
     }
 
+    def doubleToString(list: List[Double]): List[String] = {
+      list match {
+        case Nil => Nil
+        case Cons(x, xs) => Cons(x.toString, doubleToString(xs))
+      }
+    }
+
     def apply[A](as: A*): List[A] =
       if (as.isEmpty) Nil
       else Cons(as.head, apply(as.tail: _*))
@@ -155,6 +162,8 @@ object Test1 {
 
   def main(args: Array[String]): Unit = {
     val z: List[Int] = List(1, 2, 3)
+    val ld: List[Double] = List(1.3, 2.41321, 3.88)
+
     //    println(List(1, 2, 3))
     //    println(List(3, 2, 1))
     println("-------------------")
@@ -166,7 +175,7 @@ object Test1 {
 
     //    val listOfLists = List(List("a", "b", "c"), List("d", "e", "f"), List("g", "h"))
     //    println(List.flatten(listOfLists))
-    println(List.transform(z)(a => a + 1))
+    println(List.doubleToString(ld))
   }
 
   //append
