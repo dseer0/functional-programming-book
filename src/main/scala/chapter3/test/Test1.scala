@@ -164,8 +164,24 @@ object Test1 {
     def filter[A](as: List[A])(f: A => Boolean): List[A] = {
       as match {
         case Nil => Nil
-        case Cons(x, xs) => if(f(x)) Cons(x,filter(xs)(f)) else filter(xs)(f)
+        case Cons(x, xs) => if (f(x)) Cons(x, filter(xs)(f)) else filter(xs)(f)
       }
+    }
+
+    def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = {
+
+      def go(as: List[A], to: List[B])(f: A => List[B]): List[B] = {
+        as match {
+          case Nil => to
+          case Cons(x, xs) => {
+            val listToAppend :List[B] = f(x)
+            val listAppended :List[B] = List.appendList(to, listToAppend)
+            go(xs, listAppended)(f)
+          }
+        }
+      }
+
+      go(as, List())(f)
     }
 
     def apply[A](as: A*): List[A] =
@@ -175,10 +191,11 @@ object Test1 {
 
 
   def main(args: Array[String]): Unit = {
-    val z: List[Int] = List(1, 5, 3,4,3,5,32,5,245,5)
+    val z: List[Int] = List(1, 5, 3, 4, 3, 5, 32, 5, 245, 5)
     val ld: List[Double] = List(1.3, 2.41321, 3.88)
-    println(List.filter(z)(a => a != 5))
+//    println(List.filter(z)(a => a != 5))
 
+    println(List.flatMap(z)(a => List(a, a)))
     //    println(List(1, 2, 3))
     //    println(List(3, 2, 1))
     println("-------------------")
@@ -190,7 +207,7 @@ object Test1 {
 
     //    val listOfLists = List(List("a", "b", "c"), List("d", "e", "f"), List("g", "h"))
     //    println(List.flatten(listOfLists))
-    println(List.doubleToString(ld))
+//    println(List.doubleToString(ld))
   }
 
   //append
