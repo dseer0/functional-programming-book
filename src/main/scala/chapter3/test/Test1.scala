@@ -161,6 +161,23 @@ object Test1 {
       }
     }
 
+    def zipWith[A, B, C](as: List[A], as2: List[B])(f: (A, B) => C): List[C] = {
+      def go(as: List[A], as2: List[B], res: List[C])(f: (A, B) => C): List[C] = {
+        as match {
+          case Nil => res
+          case Cons(a, as) =>
+            as2 match {
+              case Nil => res
+              case Cons(x, xs) => {
+                go(as, xs, List.append(res, f(a,x)))(f)
+              }
+            }
+        }
+      }
+
+      go(as, as2, List())(f)
+    }
+
     def filter[A](as: List[A])(f: A => Boolean): List[A] = {
       as match {
         case Nil => Nil
@@ -170,7 +187,7 @@ object Test1 {
 
     def filterWithFM[A](as: List[A])(f: A => Boolean): List[A] = {
       flatMap(as)(a => {
-        if(f(a)) List(a)
+        if (f(a)) List(a)
         else Nil
       })
     }
@@ -199,10 +216,11 @@ object Test1 {
 
   def main(args: Array[String]): Unit = {
     val z: List[Int] = List(1, 5, 3, 4, 3, 5, 32, 5, 245, 5)
-    val ld: List[Double] = List(1.3, 2.41321, 3.88)
+    val ld: List[Double] = List(1.5, 2.5,0.33)
     //    println(List.filter(z)(a => a != 5))
+    println(List.zipWith(z, ld)((a,b)=>a*b))
+    //println(List.filterWithFM(z)(a => a != 5))
 
-    println(List.filterWithFM(z)(a => a!=5))
     //    println(List(1, 2, 3))
     //    println(List(3, 2, 1))
     println("-------------------")
