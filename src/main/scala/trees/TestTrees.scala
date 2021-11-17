@@ -16,11 +16,23 @@ object TestTrees {
       }
       go(tree)
     }
+
+    def maximum(tree: Tree[Int]): Int = {
+      def go(tree: Tree[Int]): Int = {
+        tree match{
+          case Leaf(v) => v
+          case Branch(x,xs) => go(x).max(go(xs))
+        }
+      }
+      go(tree)
+    }
   }
 
   def main(args: Array[String]): Unit = {
     val tree: Tree[Int] = Branch(Branch(Leaf(3), Leaf(4)), Branch(Leaf(5), Leaf(6)))
     println(Tree.size(tree))
+    println(Tree.maximum(tree))
+
 
   }
 }
