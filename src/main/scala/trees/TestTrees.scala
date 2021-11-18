@@ -38,24 +38,41 @@ object TestTrees {
           case Branch(x, xs) => go(x, depth + 1).max(go(xs, depth + 1))
         }
       }
-        go(tree, 0)
+
+      go(tree, 0)
+    }
+
+    def map[A](tree: Tree[A])(f: A => A): Tree[A] = {
+      tree match {
+        case Leaf(v) => Leaf(f(v))
+        case Branch(x, xs) => Branch(map(x)(f), map(xs)(f))
       }
     }
 
-    def main(args: Array[String]): Unit = {
-      val tree: Tree[Int] = Branch(
-        Branch(Leaf(3), Leaf(4)),
-        Branch(Leaf(5),
-          Branch(Leaf(12), Leaf(44))
-        )
-      )
-
-      val tree2: Tree[Int] = Branch(Branch(Leaf(4), Leaf(5)), Leaf(5))
-
-
-      println(Tree.size(tree))
-      println(Tree.maximum(tree))
-      println(Tree.depth(tree2))
-
+    def fold[A, B](as: Tree[A], z: B)(f: (B, B) => B)(g: (A, B) => B): B = {
+      as match {
+        case Leaf(v) => g(v, z)
+        case Branch(l, r) => f(fold(l, z)(f)(g), fold(r, z)(f)(g))
+      }
     }
   }
+
+  def main(args: Array[String]): Unit = {
+    val tree: Tree[Int] = Branch(
+      Branch(Leaf(3), Leaf(4)),
+      Branch(Leaf(5),
+        Branch(Leaf(12), Leaf(44))
+      )
+    )
+
+    val tree2: Tree[Int] = Branch(Branch(Leaf(4), Leaf(5)), Leaf(5))
+
+
+    println(Tree.size(tree))
+    println(Tree.maximum(tree))
+    println(Tree.depth(tree2))
+
+    println(Tree.map(tree2)(x => x * 3))
+
+  }
+}
