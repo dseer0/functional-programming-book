@@ -63,6 +63,10 @@ object OptionTest {
         }
       }
     }
+
+    def traverse[A,B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
+      sequence(a.map(f(_))) //TODO could be better
+    }
   }
 
   def main(args: Array[String]): Unit = {
