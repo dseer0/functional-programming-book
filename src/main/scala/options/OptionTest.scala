@@ -28,6 +28,7 @@ object OptionTest {
     def filter(f: A => Boolean): Option[A] = {
       flatMap(a => if (f(a)) Some(a) else None)
     }
+
   }
 
   case class Some[+A](get: A) extends Option[A]
@@ -46,6 +47,15 @@ object OptionTest {
       if (xs.isEmpty) None
       else Some(xs.sum / xs.size)
     }
+
+    def lift[C,B](f: C=>B): Option[C] => Option[B] = _ map f
+
+
+    def map2[A,B,C](a: Option[A], b: Option[B])(f: (A,B) => C): Option[C] = {
+      a.flatMap(a => b.map(b => f(a,b)))
+    }
+
+
   }
 
   def main(args: Array[String]): Unit = {
