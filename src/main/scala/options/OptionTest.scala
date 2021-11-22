@@ -55,13 +55,39 @@ object OptionTest {
       a.flatMap(a => b.map(b => f(a,b)))
     }
 
-
+    def sequence[A](a: List[Option[A]]): Option[List[A]]  = {
+      a match {
+        case Nil => Some(Nil)
+        case ::(head, next) =>   {
+          head.flatMap(el => sequence(next).map(el :: _))
+        }
+      }
+    }
   }
 
   def main(args: Array[String]): Unit = {
     val op = Some(Some(Some(Some(3))))
     val op2 = op.flatMap(a => a).flatMap(a => a).flatMap(a => a)
-    println(op2)
+
+    val l1 = List(
+      Some(3),
+      None,
+      Some(5)
+    )
+
+    val l3 = List(
+      Some(3),
+      Some(87),
+      Some(5)
+    )
+
+    val l2 = Nil
+
+    println(Option.sequence(l1))
+    println(Option.sequence(l2))
+    println(Option.sequence(l3))
+
+
   }
 
 }
